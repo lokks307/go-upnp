@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"gitlab.com/NebulousLabs/go-upnp/goupnp/soap"
+	"github.com/lokks307/go-upnp/goupnp/soap"
 )
 
 // ServiceClient is a SOAP client, root device and the service for the SOAP

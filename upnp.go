@@ -33,9 +33,8 @@ import (
 	"strings"
 	"time"
 
-	"gitlab.com/NebulousLabs/fastrand"
-	"gitlab.com/NebulousLabs/go-upnp/goupnp"
-	"gitlab.com/NebulousLabs/go-upnp/goupnp/dcps/internetgateway1"
+	"github.com/lokks307/go-upnp/goupnp"
+	"github.com/lokks307/go-upnp/goupnp/dcps/internetgateway1"
 )
 
 // An IGD provides an interface to the most commonly used functions of an
@@ -163,7 +162,7 @@ func DiscoverCtx(ctx context.Context) (*IGD, error) {
 	// TODO: if more than one client is found, only return those on the same
 	// subnet as the user?
 	maxTries := 3
-	sleepTime := time.Millisecond * time.Duration(fastrand.Intn(5000))
+	sleepTime := time.Millisecond * 500
 	for try := 0; try < maxTries; try++ {
 		pppclients, _, _ := internetgateway1.NewWANPPPConnection1Clients(ctx)
 		if len(pppclients) > 0 {
