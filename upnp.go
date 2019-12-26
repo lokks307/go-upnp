@@ -84,34 +84,36 @@ func (d *IGD) checkForward(port uint16, proto string) (bool, error) {
 
 // Forward forwards the specified port, and adds its description to the
 // router's port mapping table.
-func (d *IGD) Forward(port uint16, desc string) error {
+func (d *IGD) Forward(protocol string, port uint16, desc string) error {
 	ip, err := d.getInternalIP()
 	if err != nil {
 		return err
 	}
 
-	time.Sleep(time.Millisecond)
-	err = d.client.AddPortMapping("", port, "TCP", port, ip, true, desc, 0)
-	if err != nil {
-		return err
+	switch protocol {
+	case "TCP":
+		err = d.client.AddPortMapping("", port, "TCP", port, ip, true, desc, 0)
+	case "UDP":
+		err = d.client.AddPortMapping("", port, "UDP", port, ip, true, desc, 0)
+	default:
+		err = errors.New("Need a right protocol name")
 	}
-
-	time.Sleep(time.Millisecond)
-	return d.client.AddPortMapping("", port, "UDP", port, ip, true, desc, 0)
+	return err
 }
 
 // Clear un-forwards a port, removing it from the router's port mapping table.
-func (d *IGD) Clear(port uint16) error {
-	time.Sleep(time.Millisecond)
-	tcpErr := d.client.DeletePortMapping("", port, "TCP")
-	time.Sleep(time.Millisecond)
-	udpErr := d.client.DeletePortMapping("", port, "UDP")
-
-	// only return an error if both deletions failed
-	if tcpErr != nil && udpErr != nil {
-		return tcpErr
+func (d *IGD) Clear(protocol string, port uint16) error {
+	var err error
+	switch protocol {
+	case "TCP":
+		err = d.client.DeletePortMapping("", port, "TCP")
+	case "UDP":
+		err = d.client.DeletePortMapping("", port, "UDP")
+	default:
+		err = errors.New("Need a right protocol name")
 	}
-	return nil
+
+	return err
 }
 
 // Location returns the URL of the router, for future lookups (see Load).
