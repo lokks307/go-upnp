@@ -55,7 +55,7 @@ func TestIGD(t *testing.T) {
 	t.Log("Your external IP is:", ip)
 
 	// forward a port
-	err = d.Forward("TCP", 9001, "upnp test")
+	err = d.Forward("TCP", 9001, 9001, "upnp test", time.Second*30)
 	if err != nil {
 		t.Fatal(err)
 	}
